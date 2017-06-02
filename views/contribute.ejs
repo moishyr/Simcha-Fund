@@ -1,0 +1,53 @@
+    <% if(firstResult.length > 0 && secondResult.length > 0) { %>
+    <form class="form-horizontal" method="post" action="./contribute">
+        <div class="form-group">
+            <div class="col-md-6 text-left">
+                <div class="col-md-4 text-left">
+                    <label for="contributorName">Contributor Name</label>
+                </div>
+                <div class="col-md-8 text-left">
+                    <select id="contributorName" name="contributorName" class="form-control">
+                    <% Object.keys(firstResult).forEach(function(keys) {
+                        var tableColumns = firstResult[keys]; %>
+                        <% if(firstResult[keys].active) { %>
+                            <option value="<%= firstResult[keys].id %>"><%= firstResult[keys].name %></option>
+                        <% } %>
+                    <% }); %>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6 text-left">
+                <div class="col-md-4 text-left">
+                    <label for="baalSimcha">Baal Simcha</label>
+                </div>
+                <div class="col-md-8 text-left">
+                    <select id="baalSimcha" name="baalSimcha" class="form-control">
+                    <% Object.keys(secondResult).forEach(function(keys) {
+                        var tableColumns = secondResult[keys]; %>
+                        <% if(secondResult[keys].active) { %>
+                            <option value="<%= secondResult[keys].id %>"><%= secondResult[keys].name %> - <%= secondResult[keys].simcha_type %></option>
+                        <% } %>
+                    <% }); %>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6 text-left">
+                <div class="col-md-4 text-left">
+                    <label for="contributionAmount">Contribution Amount </label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" type="number" id="contributionAmount" name="contributionAmount" step=".01">
+                </div>
+            </div>
+        </div>
+        <div "form-group">
+            <input class="btn btn-primary" type="submit" value="Submit">
+        </div>
+    </form>
+    <% } else { %>
+    <div class="well text-center">You need to at least one contributor and one baal simcha in the database</div>
+    <% } %>

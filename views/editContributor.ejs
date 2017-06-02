@@ -1,0 +1,39 @@
+<form class="form-horizontal" method="post" action="./editContributor">
+    <div class="form-group">
+        <div class="col-md-2 text-right">
+            <label class="control-label" for="fname">First Name </label>
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" type="text" name="fname" id="fname" value="<%= fname %>">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 text-right">
+            <label class="control-label" for="lname">Last Name </label>
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" type="text" name="lname" id="lname" value="<%= lname %>">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 text-right">
+            <label class="control-label" for="addMoney">Add Money </label>
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" type="number" name="addMoney" id="addMoney" step=".01">
+        </div>
+        current balance is <%= balance %>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            <input class="btn btn-warning" type="submit" value="Submit">
+        </div>
+    </div>
+    <input type="hidden" name="id" value="<%= id %>">
+</form>
+<form class="form-horizontal" method="post" action="./removeContributor">
+    <div "form-group">
+        <input type="hidden" name="id" value="<%= id %>">
+        <input class="btn btn-danger" type="submit" value="Delete Contributor">
+    </div>
+</form>

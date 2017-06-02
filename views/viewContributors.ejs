@@ -1,0 +1,48 @@
+<% if(data.length > 0) { %>
+<table class="table table-bordered table-striped table-hover table-condensed">
+    <thead>
+        <tr>
+        <% Object.keys(data[0]).forEach(rowInColumn => { %>
+            <% if(rowInColumn !== 'id' && rowInColumn !== 'active' ) { %>
+                <th>
+                    <%= rowInColumn %>
+                </th>
+                <% } %>
+            <% }); %>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% Object.keys(data).forEach(function(keys) {
+            var tableColumns = data[keys]; 
+            if(data[keys].active) { %>
+                <tr>
+                    <%  let id = null, fname = null, lname = null, balance = null;
+                    Object.keys(data[keys]).forEach(rowInColumn => { 
+                        if( rowInColumn !== 'id' && rowInColumn !== 'active' ) { %>
+                            <td>
+                                <%= tableColumns[rowInColumn] %>
+                            </td>
+                        <% } 
+                        if ( rowInColumn === 'id' ) { 
+                                id = tableColumns[rowInColumn] 
+                        } 
+                        if(rowInColumn === 'first name') {
+                            fname = tableColumns[rowInColumn];
+                        }
+                        if(rowInColumn === 'last name') {
+                            lname = tableColumns[rowInColumn];
+                        } 
+                        if(rowInColumn === 'Balance') {
+                            balance = tableColumns[rowInColumn];
+                        } 
+                    }); %>
+                    <td class="text-center"><a class="btn btn-default btn-sm" href="./addOrRemoveContributor?id=<%= id %>&fname=<%= fname %>&lname=<%= lname %>&balance=<%= balance %>">edit/remove</a></td>
+                </tr>
+            <% } %>
+        <% }); %>
+    </tbody>
+</table>
+<% } else { %>
+<div class="well text-center">There are no contributors in the database</div>
+<% } %>

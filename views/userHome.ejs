@@ -1,0 +1,76 @@
+<div class="col-xs-4">
+<form class="form-horizontal" method="POST" action="./submitContribution">
+    <div class="text-center well">
+        <div class="form-group">
+            <div class="col-md-4 text-left">
+                <label for="contributeTo">Contribute To</label>
+            </div>
+            <div class="col-md-8 text-left">
+                <select name="contributeTo" id="contributeTo" class="form-control">
+                    <% Object.keys(baaleiSimcha).forEach(keys => { %>
+                        <% if(baaleiSimcha[keys].active) { %>
+                            <option value="<%= baaleiSimcha[keys].id %>"><%= baaleiSimcha[keys].name %> - <%= baaleiSimcha[keys].simcha_type %></option>
+                        <% } %>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4 text-left">
+                <label for="amount">Amount </label>
+            </div>
+            <div class="col-md-8 text-left">
+                <input class="form-control" id="amount" name="amount" type="number" step=".01">
+            </div>
+        </div>
+        <input type="hidden" name="contributor" value="<%= contributor[0].id %>">
+        <div class="form-group">
+            <div class="col-md-12 text-left">
+                <button class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<div class="col-xs-8">
+    <% if(contributor.length > 0) { %>
+    <h2 class="text-center well"><%= contributor[0].name %></h2>
+    <table class="table table-bordered table-striped table-hover table-condensed">
+        <thead>
+            <tr>
+            <% Object.keys(contributor[0]).forEach(rowInColumn => { %>
+                <% if(rowInColumn !== 'name' && rowInColumn !== 'id' && rowInColumn !== 'active') { %>
+                    <th>
+                        <%= rowInColumn %>
+                    </th>
+                <% } %>
+            <% }); %>
+            </tr>
+        </thead>
+        <tbody>
+            <% Object.keys(contributor).forEach(function(keys) {
+                var tableColumns = contributor[keys]; %>
+                <tr>
+                <% Object.keys(contributor[keys]).forEach(rowInColumn => { %>
+                    <% if(rowInColumn !== 'name' && rowInColumn !== 'id' && rowInColumn !== 'active') { %>
+                        <td>
+                            <%= tableColumns[rowInColumn] %>
+                        </td>
+                    <% } %>
+                <% }); %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <% } %>
+</div>
+<div class="clearfix"></div>
+<div class="col-xs-6 text-left">
+    <a class="btn btn-warning" href="./logOut">Log Out</a>
+</div>
+<div class="col-xs-6 text-right">
+    <a class="btn btn-default" href="./admin/">Admin</a>
+</div>
+<div class="col-xs-12 text-right">
+    <a class="btn btn-info" href="./changePassword">Change Password</a>
+</div>

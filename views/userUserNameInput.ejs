@@ -1,0 +1,8 @@
+<select id="contributorName" name="userName" class="form-control">
+<% Object.keys(contributorsResult).forEach(function(keys) {
+    var tableColumns = contributorsResult[keys]; %>
+    <% if(contributorsResult[keys].active) { %>
+        <option value="<%= contributorsResult[keys].id %>"><%= contributorsResult[keys].contributor %></option>
+    <% } %>
+<% }); %>
+</select>
