@@ -312,7 +312,7 @@ router.post('/contribute', (req, res) => {
                 return res.json({ error });
             }
         });
-        let updateSimcha = 'UPDATE simcha Set total_collected = total_collecte + ' + req.body.contributionAmount + ' WHERE id = ?';
+        let updateSimcha = 'UPDATE simcha Set total_collected = total_collected + ' + req.body.contributionAmount + ' WHERE id = ?';
         con.query(updateSimcha, [req.body.baalSimcha], function (error, results, fields) {
             if (error) {
                 con.rollback(function () {
