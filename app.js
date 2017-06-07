@@ -8,7 +8,7 @@ const express = require('express'),
     // mySql = require('mysql'),
     jsonParser = bodyParser.json(),
     urlencodedParser = bodyParser.urlencoded({ extended: false }),
-    con = require('./mySqlConnection');
+    con = require('./db/mySqlConnection');
     // con = mySql.createConnection({
     //     host: "localhost",
     //     user: "test",
@@ -18,6 +18,7 @@ const express = require('express'),
 
 con.connect(function (err) {
     if (err) {
+        console.error('error', error);
         throw err;
     }
     console.log("Connected!");
@@ -40,4 +41,4 @@ app.use('/admin', admin);
 app.use('/', user);
 
 app.use(secure);
-app.listen(3000, () => console.log('server is running on port 3000'));
+app.listen(3001, () => console.log('server is running on port 3001'));
