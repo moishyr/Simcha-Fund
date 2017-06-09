@@ -5,20 +5,13 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     path = require('path'),
     secure = require('express-force-https'),
-    // mySql = require('mysql'),
     jsonParser = bodyParser.json(),
     urlencodedParser = bodyParser.urlencoded({ extended: false }),
     con = require('./db/mySqlConnection');
-    // con = mySql.createConnection({
-    //     host: "localhost",
-    //     user: "test",
-    //     password: "p@$$w0rd",
-    //     database: "simcha_fund"
-    // });
 
 con.connect(function (err) {
     if (err) {
-        console.error('error', error);
+        console.error('error', err);
         throw err;
     }
     console.log("Connected!");
