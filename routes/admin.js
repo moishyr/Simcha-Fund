@@ -3,41 +3,35 @@
 const express = require('express'),
     router = express.Router(),
     session = require('express-session'),
+    passport = require('passport'),
+    isLoggedIn = require('../utils/passport/admin'),
     login = require('../models/login'),
     homePage = require('../models/homePage'),
     contributorsRequest = require('../models/contributors'),
     simchaRequests = require('../models/simcha');
 
-router.use(session({
-    secret: 'admin user name',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 7200000 } // 2 hours
+router.get('/signup', (req, res) => {
+    res.render('template', { content: 'signup', user: 'admin', styleSheet: 'styleSheets/login.css' });
+});
+
+router.post('/signup', passport.authenticate('local-signup', {
+    // for now we only have one admin so in the form we will redirect to the login
+    successRedirect: '/admin/',
+    failureRedirect: '/admin/signup'
 }));
 
-router.post('/login', (req, res, next) => {
-    login.verifyAdminInfo(req.body.userName, req.body.password, (err, isCorrectUserName, isCorrectPassword) => {
-        if (isCorrectUserName && isCorrectPassword) {
-            req.session.adminLoggedIn = 'successfully logged in';
-            res.redirect('./');
-        } else {
-            next();
-        }
-    });
+router.get('/login', (req, res) => {
+    res.render('template', { content: 'login', inputType: 'text', styleSheet: 'styleSheets/login.css' });
+    return;
 });
 
-router.use(function (req, res, next) {
-    if (!req.session.adminLoggedIn) {
-        res.render('template', { content: 'login', inputType: 'text', styleSheet: 'styleSheets/login.css' });
-        return;
-    } else {
-        next();
-    }
-});
+router.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/admin/',
+    failureRedirect: '/admin/login'/*,
+    failureFlash: true*/
+}));
 
-
-
-router.get('/', (req, res) => {
+router.get('/', isLoggedIn, (req, res) => {
     homePage.createMainAdminTable(req.query, (err, displayTableResult, contributorsResult, simchasResult) => {
         if (err) {
             throw err;
@@ -53,7 +47,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/viewContributors', (req, res) => {
+router.get('/viewContributors', isLoggedIn, (req, res) => {
     contributorsRequest.viewContributors((err, result) => {
         if (err) {
             throw err;
@@ -66,7 +60,7 @@ router.get('/viewContributors', (req, res) => {
     });
 });
 
-router.get('/addOrRemoveContributor', (req, res) => {
+router.get('/addOrRemoveContributor', isLoggedIn, (req, res) => {
     res.render('template', {
         id: req.query.id,
         fname: req.query.fname,
@@ -77,26 +71,26 @@ router.get('/addOrRemoveContributor', (req, res) => {
     });
 });
 
-router.post('/editcontributor', (req, res) => {
+router.post('/editcontributor', isLoggedIn, (req, res) => {
     contributorsRequest.editContributor(req.body.fname, req.body.lname, req.body.addMoney, req.body.id, (err, result) => {
         if (err) {
             throw err;
         }
-        res.redirect('./');
+        res.redirect('/admin/');
     });
 });
 
-router.post('/removeContributor', (req, res) => {
+router.post('/removeContributor', isLoggedIn, (req, res) => {
     contributorsRequest.removeContributor([req.body.id], (err, result) => {
         if (err) {
             throw err;
         }
-        res.redirect('./');
+        res.redirect('/admin/');
     });
 
 });
 
-router.get('/viewSimchas', (req, res) => {
+router.get('/viewSimchas', isLoggedIn, (req, res) => {
     simchaRequests.viewSimchas((err, result) => {
         if (err) {
             throw err;
@@ -109,7 +103,7 @@ router.get('/viewSimchas', (req, res) => {
     });
 });
 
-router.get('/addOrRemoveSimcha', (req, res) => {
+router.get('/addOrRemoveSimcha', isLoggedIn, (req, res) => {
     res.render('template', {
         id: req.query.id,
         name: req.query.name,
@@ -119,25 +113,25 @@ router.get('/addOrRemoveSimcha', (req, res) => {
     });
 });
 
-router.post('/editSimcha', (req, res) => {
+router.post('/editSimcha', isLoggedIn, (req, res) => {
     simchaRequests.editSimcha(req.body.name, req.body.simchaType, req.body.id, (err, result) => {
         if (err) {
             throw err;
         }
-        res.redirect('./');
+        res.redirect('/admin/');
     });
 });
 
-router.post('/removeSimcha', (req, res) => {
+router.post('/removeSimcha', isLoggedIn, (req, res) => {
     simchaRequests.removeSimcha(req.body.id, (err, result) => {
         if (err) {
             throw err;
         }
-        res.redirect('./');
+        res.redirect('/admin/');
     });
 });
 
-router.get('/addContributor', (req, res) => {
+router.get('/addContributor', isLoggedIn, (req, res) => {
     res.render('template', { content: 'addContributor', styleSheet: '' });
 });
 
@@ -146,24 +140,24 @@ router.post('/addContributor', (req, res) => {
         if (err) {
             return res.json({ err });
         }
-        res.redirect('./');
+        res.redirect('/admin/');
     });
 });
 
-router.get('/addSimcha', (req, res) => {
+router.get('/addSimcha', isLoggedIn, (req, res) => {
     res.render('template', { content: 'addSimcha', styleSheet: '' });
 });
 
-router.post('/addSimcha', (req, res) => {
+router.post('/addSimcha', isLoggedIn, (req, res) => {
     simchaRequests.addSimcha(req.body.name, req.body.simchaType, (error, result) => {
         if (error) {
             return res.json({ error });
         }
-        res.redirect('./');
+        res.redirect('/admin/');
     });
 });
 
-router.get('/contribute', (req, res) => {
+router.get('/contribute', isLoggedIn, (req, res) => {
     contributorsRequest.contributionPageSetup((err, firstResult, secondResult) => {
         if (err) {
             throw err;
@@ -178,38 +172,38 @@ router.get('/contribute', (req, res) => {
     });
 });
 
-router.post('/contribute', (req, res) => {
+router.post('/contribute', isLoggedIn, (req, res) => {
     contributorsRequest.contribute(req.body.contributorName, req.body.baalSimcha, req.body.contributionAmount, (err, result) => {
         if (err) {
             throw err;
         }
-        res.redirect('./');
+        res.redirect('/admin/');
     });
 });
 
-router.get('/changePassword', (req, res) => {
+router.get('/changePassword', isLoggedIn, (req, res) => {
     res.render('template', { content: 'changePassword', styleSheet: '' });
 });
 
-router.post('/changePassword', (req, res) => {
-    if (req.body.oldPassword  && req.body.newPassword) {
+router.post('/changePassword', isLoggedIn, (req, res) => {
+    if (req.body.oldPassword && req.body.newPassword) {
         login.changeAdminPassword(req.body.oldPassword, req.body.newPassword, (err, result, isCorrectPassword) => {
-            if(err) {
+            if (err) {
                 throw err;
             }
-            if(!isCorrectPassword) {
-                return res.redirect('./changePassword');
+            if (!isCorrectPassword) {
+                return res.redirect('/admin/changePassword');
             }
-            res.redirect('./');
+            res.redirect('/admin');
         });
     } else {
-        res.redirect('./changePassword');
+        res.redirect('/admin/changePassword');
     }
 });
 
-router.get('/logOut', (req, res) => {
-    req.session.req.session.adminLoggedIn = null;
-    res.redirect('./');
+router.get('/logOut', isLoggedIn, (req, res) => {
+    req.logout();
+    res.redirect('/admin/login');
 });
 
 module.exports = router;

@@ -6,11 +6,11 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dLabel">
-                <li><a href="./viewContributors">View and Edit Contributors</a></li>
-                <li><a href="./viewSimchas">View and Edit Simchas</a></li>
-                <li><a href="./addContributor">Add Contributor</a></li>
-                <li><a href="./addSimcha">Add Simcha</a></li>
-                <li><a href="./contribute">Contribute To Simcha</a></li>
+                <li><a href="/admin/viewContributors">View and Edit Contributors</a></li>
+                <li><a href="/admin/viewSimchas">View and Edit Simchas</a></li>
+                <li><a href="/admin/addContributor">Add Contributor</a></li>
+                <li><a href="/admin/addSimcha">Add Simcha</a></li>
+                <li><a href="/admin/contribute">Contribute To Simcha</a></li>
             </ul>
         </div>
     </div> 
@@ -18,11 +18,11 @@
         <h3>Filter</h3>
         <div>
             <div class="well">
-                <a class="btn btn-primary" href="./">View All</a>
+                <a class="btn btn-primary" href="/admin/">View All</a>
             </div>
             <div class="well">
                 <% if(contributorsResult.length > 0) { %>
-                <form class="form-horizontal" method="get" action="./">
+                <form class="form-horizontal" method="get" action="/admin/">
                     <div class="form-group">
                         <div class="col-md-3 text-left">
                             <label for="contributorName">Contributor's Name</label>
@@ -48,7 +48,7 @@
             </div>
             <div class="well">
                 <% if(simchasResult.length > 0) { %>
-                <form class="form-horizontal" method="get" action="./">
+                <form class="form-horizontal" method="get" action="/admin/">
                     <div class="form-group">
                         <div class="col-md-3 text-left">
                             <label for="baalSimchaName">Baalei Simcha's Name</label>
@@ -110,8 +110,8 @@
 </div>
 <div class="clearfix"></div>
 <div class="col-xs-6 text-left">
-    <a class="btn btn-warning" href="./logOut">Log Out</a>
+    <a class="btn btn-warning" href="/admin/logOut">Log Out</a>
 </div>
 <div class="col-xs-6 text-right">
-    <a class="btn btn-info" href="./changePassword">Change Password</a>
+    <a class="btn btn-info" href="/admin/changePassword">Change Password</a>
 </div>

@@ -2,18 +2,14 @@
     <div class="row">
         <div class="col-xs-4 col-xs-offset-4">
             <div id="loginBox" class="well">
-                <h3 class="text-center">Login</h3>
-                <form class="form-horizontal" method="post" action="./login">
+                <h3 class="text-center">Signup</h3>
+                <form class="form-horizontal" action="/admin/login" method="POST"> <!-- action="/admin/signup" -->
                     <div class="form-group">
                         <div class="col-md-4 text-left">
                             <label class="control-label" for="userName">User Name </label>
                         </div>
                         <div class="col-md-8">
-                            <% if(inputType === 'text') { %>
-                                <%- include('adminUserNameInput') %>
-                            <% } else if (inputType === 'select') {%>
-                                <%- include('userUserNameInput') %>
-                            <% } %>
+                            <input class="form-control" type="text" name="userName" id="userName">
                         </div>
                     </div>
                     <div class="form-group">
@@ -21,7 +17,7 @@
                             <label for="password">Password </label>
                         </div>
                         <div class="col-md-8">
-                            <input class="form-control" type="password" id="password" name="password">
+                            <input class="form-control" type="password" name="password" id="password">
                         </div>
                     </div>
                     <div class="form-group">
@@ -29,9 +25,7 @@
                             <button class="btn btn-primary" type="submit">Login</button>
                         </div>
                     </div>
-                    <% if(inputType === 'text') { %>
-                        <span style="color: green">New User? <a href="./signup">Signup</a></span>
-                    <% } %>
+                    <span style="color: green">Already au user? <a href="./login">Login</a></span>
                 </form>
             </div>
         </div>

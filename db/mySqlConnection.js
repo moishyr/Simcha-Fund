@@ -1,11 +1,11 @@
 'use strict';
-
+require('dotenv').config();
 const mySql = require('mysql'),
     con = mySql.createConnection({
-        host: "localhost",
-        user: "test",
-        password: "p@$$w0rd",
-        database: "simcha_fund"
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME
     });
-    
-    module.exports = con;
+
+module.exports = con;

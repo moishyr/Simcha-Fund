@@ -6,14 +6,29 @@ const con = require('../db/mySqlConnection'),
 
 let login = {};
 
-function verifyAdminInfo(userName, password, callback) {
-    var sql = "SELECT user_name, password FROM admin";
-    con.query(sql, function (err, loginInfo) {
-        if (err) {
-            throw err;
-        }
-        bcrypt.compare(password, loginInfo[0].password, function (err, isCorrectPassword) {
-            callback(err, userName === loginInfo[0].user_name, isCorrectPassword);
+function passportAdminLogin(username, callback) {
+    let sql = 'SELECT * from users WHERE username = ?';
+    con.query(sql, [username], (err, result) => {
+        callback(err, result);
+    });
+}
+
+function passportUsersLogin(username, callback) {
+    let sql = 'SELECT * from contributor_info WHERE id = ?';
+    con.query(sql, [username], (err, result) => {
+        callback(err, result);
+    });
+}
+
+function passportSignup(username, callback) {
+    con.query("SELECT * FROM users WHERE username = ?", [username], function (err, result) {
+        callback(err, result, (user, done) => {
+            var insertQuery = "INSERT INTO users ( username, password ) values (?,?)";
+            con.query(insertQuery, [user.username, user.password], function (err, rows) {
+                user.id = rows.insertId;
+
+                return done(null, user);
+            });
         });
     });
 }
@@ -21,13 +36,13 @@ function verifyAdminInfo(userName, password, callback) {
 function changeAdminPassword(oldPassword, newPassword, callback) {
     function hashPassword(newPassword) {
         bcrypt.hash(newPassword, 6, function (err, hash) {
-            con.query("UPDATE admin SET password = ?", [hash], (err, result) => {
+            con.query("UPDATE users SET password = ?", [hash], (err, result) => {
                 callback(err, result, true);
             });
         });
     }
 
-    var sql = "SELECT password FROM admin";
+    var sql = "SELECT password FROM users";
     con.query(sql, function (err, result) {
         if (err) {
             throw err;
@@ -48,10 +63,10 @@ function changeAdminPassword(oldPassword, newPassword, callback) {
 
 function getUsers(callback) {
     let sqlContributorsList = "SELECT id, CONCAT(first_name, ' ', last_name) contributor, active " +
-      "FROM contributor_info " +
-      "ORDER BY contributor";
+        "FROM contributor_info " +
+        "ORDER BY contributor";
     con.query(sqlContributorsList, function (err, contributors) {
-      callback(err, contributors);
+        callback(err, contributors);
     });
 }
 
@@ -102,7 +117,9 @@ function changeUserPassword(oldPassword, newPassword, id, callback) {
     });
 }
 
-login.verifyAdminInfo = verifyAdminInfo;
+login.passportAdminLogin = passportAdminLogin;
+login.passportUsersLogin = passportUsersLogin;
+login.passportSignup = passportSignup;
 login.changeAdminPassword = changeAdminPassword;
 login.getUsers = getUsers;
 login.verifyUserInfo = verifyUserInfo;

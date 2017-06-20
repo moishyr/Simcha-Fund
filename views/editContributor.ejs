@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="./editContributor">
+<form class="form-horizontal" method="post" action="/admin/editContributor">
     <div class="form-group">
         <div class="col-md-2 text-right">
             <label class="control-label" for="fname">First Name </label>
@@ -31,7 +31,7 @@
     </div>
     <input type="hidden" name="id" value="<%= id %>">
 </form>
-<form class="form-horizontal" method="post" action="./removeContributor">
+<form class="form-horizontal" method="post" action="/admin/removeContributor">
     <div "form-group">
         <input type="hidden" name="id" value="<%= id %>">
         <input class="btn btn-danger" type="submit" value="Delete Contributor">
